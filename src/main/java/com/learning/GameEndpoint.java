@@ -54,14 +54,33 @@ public class GameEndpoint {
                     sender.getUserProperties().put("attempts", count);
 
                     //display user outcome from guess and attempts
-                    sender.getBasicRemote().sendText(sender.getUserProperties().get("username") +
-                            ": " + game.guess(message) + "\n # of tries = " +
-                            sender.getUserProperties().get("attempts"));
+                    String decision = game.guess(message);
+                    switch(decision){
+                        case "high": {
+                            sender.getBasicRemote().sendText(sender.getUserProperties().get("username") +
+                                  ": TOO HIGH " + "\n# of attempts: " + sender.getUserProperties().get("attempts"));
+                        }break;
+                        case "low": {
+                            sender.getBasicRemote().sendText(sender.getUserProperties().get("username") +
+                                    ": TOO LOW " + "\n# of attempts: " + sender.getUserProperties().get("attempts"));
+                        }break;
+                        case "win": {
+                            sender.getBasicRemote().sendText(sender.getUserProperties().get("username") +
+                                    ": YOU WIN" + "\n# of attempts: " + sender.getUserProperties().get("attempts"));
 
+                            otherBroadcast(sender,sender.getUserProperties().get("username") + ": HAS WON!");
+                            resetAttempts();
+                            broadcast("\n\nSTARTING NEW GAME!\n\n\nRANDOM NUMBER CHOSE START GUESSING!");
+                        }break;
+                        default:
+                            System.out.println("Unknown command.");
+                            break;
+                    }
 
                     //broadcast to server who guessed what
                     otherBroadcast(sender, sender.getUserProperties().get("username") + " guessed -> "
                             + Integer.parseInt(message.trim()));
+
                 }catch(IOException e){
                     System.out.println("failed to send message " + e.getMessage());
                 }
@@ -111,6 +130,15 @@ public class GameEndpoint {
                 if(session != sender){
                     sendTo(session,message);
                 }
+            }
+        }
+    }
+
+    //reset all users attempts
+    public void resetAttempts(){
+        synchronized (sessions){
+            for(Session session :sessions){
+                session.getUserProperties().put("attempts", 0);
             }
         }
     }

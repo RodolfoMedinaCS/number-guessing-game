@@ -22,12 +22,12 @@ public class NumberGame {
         int userGuess = Integer.parseInt(guess.trim());
 
         if(userGuess > secreteNumber){
-            return "TOO HIGH!";
+            return "high";
         }else if (userGuess < secreteNumber){
-            return "TOO LOW";
+            return "low";
         }else{
             new NumberGame();
-            return "YOU WIN!\n\nGame restarted guess the new number!";
+            return "win";
         }
 
     }
