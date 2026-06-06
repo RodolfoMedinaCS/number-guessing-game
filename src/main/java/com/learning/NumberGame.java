@@ -4,7 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class NumberGame {
 
-    private static int secreteNumber;
+    private int secreteNumber;
 
 
     public NumberGame(){
@@ -13,12 +13,12 @@ public class NumberGame {
 
 
 
-    public static synchronized void resetNumber(){
+    public  synchronized void resetNumber(){
         secreteNumber = ThreadLocalRandom.current().nextInt(1, 101);
     }
 
 
-    public static synchronized String guess(String guess){
+    public  synchronized String guess(String guess){
         int userGuess = Integer.parseInt(guess.trim());
 
         if(userGuess > secreteNumber){
