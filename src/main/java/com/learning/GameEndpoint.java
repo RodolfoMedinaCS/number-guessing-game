@@ -75,11 +75,11 @@ public class GameEndpoint {
                                     ": YOU WIN" + "\n# of attempts: " + sender.getUserProperties().get("attempts"));
 
                             otherBroadcast(sender,sender.getUserProperties().get("username") + ": HAS WON!");
-                            resetAttempts();
                             //broadcast to server who guessed what
                             otherBroadcast(sender, sender.getUserProperties().get("username") + " guessed -> "
                                     + Integer.parseInt(message.trim()));
 
+                            resetAttempts();
                             broadcast("\n\nSTARTING NEW GAME!\n\n\nRANDOM NUMBER CHOSE START GUESSING!");
 
                         }break;

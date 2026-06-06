@@ -26,7 +26,7 @@ public class NumberGame {
         }else if (userGuess < secreteNumber){
             return "low";
         }else{
-            new NumberGame();
+            resetNumber();
             return "win";
         }
 
