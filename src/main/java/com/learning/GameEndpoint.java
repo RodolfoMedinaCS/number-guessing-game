@@ -59,10 +59,16 @@ public class GameEndpoint {
                         case "high": {
                             sender.getBasicRemote().sendText(sender.getUserProperties().get("username") +
                                   ": TOO HIGH " + "\n# of attempts: " + sender.getUserProperties().get("attempts"));
+                            //broadcast to server who guessed what
+                            otherBroadcast(sender, sender.getUserProperties().get("username") + " guessed -> "
+                                    + Integer.parseInt(message.trim()));
                         }break;
                         case "low": {
                             sender.getBasicRemote().sendText(sender.getUserProperties().get("username") +
                                     ": TOO LOW " + "\n# of attempts: " + sender.getUserProperties().get("attempts"));
+                            //broadcast to server who guessed what
+                            otherBroadcast(sender, sender.getUserProperties().get("username") + " guessed -> "
+                                    + Integer.parseInt(message.trim()));
                         }break;
                         case "win": {
                             sender.getBasicRemote().sendText(sender.getUserProperties().get("username") +
@@ -70,16 +76,19 @@ public class GameEndpoint {
 
                             otherBroadcast(sender,sender.getUserProperties().get("username") + ": HAS WON!");
                             resetAttempts();
+                            //broadcast to server who guessed what
+                            otherBroadcast(sender, sender.getUserProperties().get("username") + " guessed -> "
+                                    + Integer.parseInt(message.trim()));
+
                             broadcast("\n\nSTARTING NEW GAME!\n\n\nRANDOM NUMBER CHOSE START GUESSING!");
+
                         }break;
                         default:
                             System.out.println("Unknown command.");
                             break;
                     }
 
-                    //broadcast to server who guessed what
-                    otherBroadcast(sender, sender.getUserProperties().get("username") + " guessed -> "
-                            + Integer.parseInt(message.trim()));
+
 
                 }catch(IOException e){
                     System.out.println("failed to send message " + e.getMessage());
@@ -95,8 +104,6 @@ public class GameEndpoint {
     public void onClose(Session session){
         sessions.remove(session);
         String username = (String) session.getUserProperties().get("username");
-        broadcast(session.getUserProperties().get("username") + ": Has left the game");
-
         //checks if user has username incase they join and just leave the game
         if(username != null){
             broadcast(username + " has left the game");
