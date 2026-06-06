@@ -93,8 +93,14 @@ public class GameEndpoint {
     //when user exits out of the server, this is what fires
     @OnClose
     public void onClose(Session session){
-        broadcast(session.getUserProperties().get("username") + ": Has left the game");
         sessions.remove(session);
+        String username = (String) session.getUserProperties().get("username");
+        broadcast(session.getUserProperties().get("username") + ": Has left the game");
+
+        //checks if user has username incase they join and just leave the game
+        if(username != null){
+            broadcast(username + " has left the game");
+        }
     }
 
     //when user either loses connection or slams laptop shut this fires
